@@ -7,7 +7,7 @@ import com.stackroute.activitystream.model.User;
 public interface UserDAO {
 
 	public boolean saveUser(User user);
-	public User getUserByUsername(String username);
+	public User getUserByEmailId(String emailId);
 	public boolean deleteUser(User user);
 	public boolean updateUser(User user);
 	public List<User> getAllUsers();

@@ -50,22 +50,32 @@ public class UserRestController {
 		{
 			user.setErrorCode("200");
 			user.setErrorMessage("You have successfully logged in.");
-			session.setAttribute("loggedInUser", user);
+			session.setAttribute("loggedInUser", user.getUsername());
 		}
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public ResponseEntity<User> logout(HttpSession session) {
+		String username=(String)session.getAttribute("loggedInUser");
+		if(username !=null)
+		{
 		session.invalidate();
+		session.setMaxInactiveInterval(0);
 		user.setErrorCode("200");
 		user.setErrorMessage("You have successfully logged out");
+		}
+		else
+		{
+			user.setErrorCode("405");
+			user.setErrorMessage("You are not loggedIn ...Please Login");
+		}
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/userById/{username}", method = RequestMethod.GET)
-	public ResponseEntity<User> getUserById(@PathVariable("username") String username) {
-		User user = userDAO.getUserByUsername(username);
+	public ResponseEntity<User> getUserById(@PathVariable("emailId") String emailId) {
+		User user = userDAO.getUserByEmailId(emailId);
 		if (user == null) {
 			user = new User();
 			user.setErrorCode("404");
@@ -75,12 +85,12 @@ public class UserRestController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/deleteUserById/{username}", method = RequestMethod.POST)
-	public ResponseEntity<User> deleteUserById(@PathVariable("username") String username) {
-		User user = userDAO.getUserByUsername(username);
+	public ResponseEntity<User> deleteUserById(@PathVariable("emailId") String emailId) {
+		User user = userDAO.getUserByEmailId(emailId);
 		if (user == null) {
 			user = new User();
 			user.setErrorCode("404");
-			user.setErrorMessage("User does not exist with this username :"+username);
+			user.setErrorMessage("User does not exist with this username :"+emailId);
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 		userDAO.deleteUser(user);

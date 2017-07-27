@@ -25,8 +25,9 @@ public class UserDAOImpl implements UserDAO{
 			return true;
 		} catch (HibernateException e) {
 			e.printStackTrace();
-			return false;
+			
 		}
+		return false;
 	}
 
 	public User validateUser(String username, String password) {
@@ -43,9 +44,11 @@ public class UserDAOImpl implements UserDAO{
 		return null;
 	}
 
-	public User getUserByUsername(String username) {
+	public User getUserByEmailId(String emailId) {
 	
-		return sessionFactory.getCurrentSession().get(User.class, username);
+		System.out.println(emailId);
+		User user=(User)sessionFactory.getCurrentSession().createQuery("from User where emailId='"+emailId+"'").uniqueResult();
+		return user;
 	}
 
 	public boolean deleteUser(User user) {
@@ -76,9 +79,5 @@ public class UserDAOImpl implements UserDAO{
 		return sessionFactory.getCurrentSession().createQuery("from User").list();
 	}
 
-	public User getUserByUserId(int userId) {
-		
-		return sessionFactory.getCurrentSession().get(User.class, userId);
-	}
 	
 }

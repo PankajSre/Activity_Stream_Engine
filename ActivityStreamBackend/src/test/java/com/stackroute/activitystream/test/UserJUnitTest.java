@@ -32,43 +32,93 @@ public class UserJUnitTest {
 		user=(User) context.getBean("user");
 		userDAO = (UserDAO) context.getBean("userDAO");
 	}
+  
 	@Ignore
 	@Test
 	public void testSaveUser()
 	{
-		user.setUsername("pankaj");
-		user.setPassword("pankaj@123");
-		user.setEmailId("pankaj@gmail.com");
-		user.setMobileNumber(9897240728L);
+		user.setUsername("krishna");
+		user.setPassword("krishna");
+		user.setEmailId("krishna@gmail.com");
+		user.setMobileNumber(800724072L);
+		user.setActive(true);
 		assertEquals(true, userDAO.saveUser(user));
 	}
 	@Ignore
-    @Test
+	@Test
+	public void testDuplicateSaveUser()
+	{
+		user.setUsername("arun");
+		user.setPassword("arun@123");
+		user.setEmailId("arun@gmail.com");
+		user.setMobileNumber(9897240728L);
+		assertEquals(false, userDAO.saveUser(user));
+	}
+//*****************************User Login Test cases*****************************
+   @Ignore
+	@Test
 	public void testValidateUser()
 	{
-		User validatedUser=userDAO.validateUser("pankaj", "pankaj@123");
+		User validatedUser=userDAO.validateUser("pankaj", "pankaj");
 		assertNotNull(validatedUser);
 	}
-	@Ignore
+   @Ignore
+    @Test
+   	public void testValidateUserByWrongCredentials()
+   	{
+   		User validatedUser=userDAO.validateUser("krishna", "pankaj");
+   		assertNull(validatedUser);
+   	}
+   @Ignore
+    @Test
+   	public void testValidateUserByNullUsername()
+   	{
+   		User validatedUser=userDAO.validateUser("", "pankaj");
+   		assertNull(validatedUser);
+   	}
+   @Ignore
+    @Test
+   	public void testValidateUserByNullPassword()
+   	{
+   		User validatedUser=userDAO.validateUser("pankaj", "");
+   		assertNull(validatedUser);
+   	}
+   @Ignore
+    @Test
+   	public void testValidateUserByUppercaseUsername()
+   	{
+   		User validatedUser=userDAO.validateUser("PANKAJ", "pankaj");
+   		assertNotNull(validatedUser);
+   	}
+   @Ignore
+    @Test
+   	public void testValidateUserByUppercasePassword()
+   	{
+   		User validatedUser=userDAO.validateUser("pankaj", "PANKAJ");
+   		assertNotNull(validatedUser);
+   	}
+  //*****************************User Login Test cases End*****************************
+  
 	@Test
-	public void testGetUserById()
+	public void testGetUserByEmailId()
 	{
-		User userById=userDAO.getUserByUsername("pankaj");
+		
+		User userById=userDAO.getUserByEmailId("advik@gmail.com");
 		assertNotNull(userById);
-		System.out.println("User Email ID :"+user.getEmailId());		
+		System.out.println("User Email ID :"+userById.getEmailId());		
 	}
 	@Ignore
 	@Test
 	public void testDeleteUser()
 	{
-		User deletedUser=userDAO.getUserByUsername("pankaj");
+		User deletedUser=userDAO.getUserByEmailId("advik@gmail.com");
 		assertNotNull(deletedUser);
 	}
 	@Ignore
 	@Test
 	public void testUpdateUser()
 	{
-		User updatedUser=userDAO.getUserByUsername("pankaj");
+		User updatedUser=userDAO.getUserByEmailId("advik@gmail.com");
 		assertNotNull(updatedUser);
 		updatedUser.setEmailId("Pankaj.saini85@gmail.com");
 		assertEquals(true, userDAO.updateUser(updatedUser));

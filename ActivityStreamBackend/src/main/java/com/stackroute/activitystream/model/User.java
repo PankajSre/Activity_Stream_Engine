@@ -3,17 +3,15 @@ package com.stackroute.activitystream.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.UniqueConstraint;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-public class User extends ErrorCode implements Serializable {
+public class User extends StatusCode implements Serializable {
 
 	private static final long serialVersionUID = -3917567546587261536L;
 	@Id
@@ -22,9 +20,19 @@ public class User extends ErrorCode implements Serializable {
 	@NotEmpty
 	private String password;
 	@NotEmpty
+	@Email
 	private String emailId;
 	private long mobileNumber;
+    private boolean isActive;
     
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
 	public String getUsername() {
 		return username;
 	}
